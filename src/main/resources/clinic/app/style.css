@@ -1,0 +1,59 @@
+/* 1. Η Αριστερή Μπάρα (Sidebar) */
+.sidebar {
+    -fx-background-color: #2c3e50;
+}
+
+/* 2. Τα Κουμπιά της Μπάρας (Κανονική Κατάσταση) */
+.sidebar-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: #ecf0f1;
+    -fx-font-size: 14px;
+    -fx-alignment: center-left;
+    -fx-cursor: hand;
+    -fx-padding: 12 15 12 15;
+    -fx-background-radius: 5;
+}
+
+/* 3. Hover: Όταν περνάς το ποντίκι από πάνω */
+.sidebar-button:hover {
+    -fx-background-color: #34495e; /* Αλλάζει το φόντο σε πιο ανοιχτό */
+    -fx-text-fill: #18bc9c;       /* Τα γράμματα γίνονται πράσινα/τιρκουάζ */
+}
+
+/* 4. Pressed: Όταν κάνεις κλικ στο κουμπί */
+.sidebar-button:pressed {
+    -fx-background-color: #1abc9c;
+    -fx-text-fill: white;
+}
+
+/* 5. Ο Πίνακας των Ραντεβού (TableView) */
+.table-view {
+    -fx-background-color: white;
+    -fx-border-color: #dcdde1;
+    -fx-background-radius: 5;
+}
+
+/* 6. Στυλ για τις κεφαλίδες του πίνακα */
+.table-view .column-header {
+    -fx-background-color: #f1f2f6;
+    -fx-border-color: #dcdde1;
+}
+
+/* 7. Γενικό κουμπί για φόρμες (Add Button) */
+.add-button {
+    -fx-background-color: #18bc9c;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 5;
+    -fx-cursor: hand;
+}
+
+/* Κεντράρισμα των δεδομένων μέσα στα κελιά του πίνακα */
+.table-cell {
+    -fx-alignment: CENTER;
+}
+
+/* Κεντράρισμα και των τίτλων (headers) του πίνακα */
+.column-header .label {
+    -fx-alignment: CENTER;
+}

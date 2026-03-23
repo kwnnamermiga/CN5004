@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox spacing="15.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="clinic.app.AppointmentController" style="-fx-background-color: #f1f2f6; -fx-padding: 30;">
+
+    <Label text="Διαχείριση Ραντεβού" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" />
+
+    <Label fx:id="notificationLabel" text="" visible="false" />
+
+    <HBox alignment="CENTER_LEFT" spacing="10.0" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 10;">
+        <children>
+            <DatePicker fx:id="datePicker" prefHeight="40.0" prefWidth="150.0" promptText="Ημερομηνία" />
+            <ComboBox fx:id="comboTime" prefHeight="40.0" prefWidth="110.0" promptText="Ώρα" />
+            <ComboBox fx:id="comboPatient" prefHeight="40.0" prefWidth="180.0" promptText="Ασθενής" />
+            <ComboBox fx:id="comboDoctor" prefHeight="40.0" prefWidth="180.0" promptText="Ιατρός" />
+            <Button onAction="#addAppointment" prefHeight="40.0" prefWidth="100.0" text="Κράτηση"
+                    style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand;" />
+        </children>
+    </HBox>
+
+    <TableView fx:id="appointmentsTable" VBox.vgrow="ALWAYS" stylesheets="@style.css">
+        <columns>
+            <TableColumn fx:id="colDate" text="ΗΜΕΡΟΜΗΝΙΑ" />
+            <TableColumn fx:id="colTime" text="ΩΡΑ" />
+            <TableColumn fx:id="colPatient" text="ΑΣΘΕΝΗΣ" />
+            <TableColumn fx:id="colDoctor" text="ΙΑΤΡΟΣ" />
+
+            <TableColumn fx:id="colEdit" text="EDIT" maxWidth="60" minWidth="60" />
+
+            <TableColumn fx:id="colDelete" text="DELETE" maxWidth="60" minWidth="60" />
+        </columns>
+    </TableView>
+
+</VBox>

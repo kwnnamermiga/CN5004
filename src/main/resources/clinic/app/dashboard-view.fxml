@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Font?>
+
+<VBox spacing="20.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="clinic.app.DashboardController">
+    <padding>
+        <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
+    </padding>
+
+    <HBox alignment="CENTER_LEFT" spacing="20.0">
+        <Label text="Ημερήσιο Πρόγραμμα" textFill="#2c3e50">
+            <font> <Font name="System Bold" size="28.0" /> </font>
+        </Label>
+        <Region HBox.hgrow="ALWAYS" />
+        <Label text="Ημερομηνία:" />
+        <DatePicker fx:id="datePicker" prefWidth="150.0" />
+    </HBox>
+
+    <TableView fx:id="dailyTable" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn fx:id="colTime" prefWidth="100.0" text="Ώρα" />
+            <TableColumn fx:id="colPatient" prefWidth="250.0" text="Ασθενής" />
+            <TableColumn fx:id="colDoctor" prefWidth="200.0" text="Ιατρός" />
+            <TableColumn fx:id="colStatus" prefWidth="150.0" text="Κατάσταση" />
+        </columns>
+        <columnResizePolicy>
+            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+        </columnResizePolicy>
+    </TableView>
+</VBox>
