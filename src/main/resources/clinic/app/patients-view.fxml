@@ -3,31 +3,43 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
 
-<VBox spacing="20" style="-fx-background-color: #f8f9fa;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="clinic.app.PatientController">
+<VBox spacing="10" style="-fx-background-color: #f8f9fa;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="clinic.app.PatientController">
     <padding>
         <Insets top="20" right="20" bottom="20" left="20"/>
     </padding>
 
     <Label text="Μητρώο Ασθενών" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;"/>
 
+    <Label fx:id="lblStatus" text="" style="-fx-font-weight: bold;">
+        <VBox.margin>
+            <Insets left="5" bottom="5" />
+        </VBox.margin>
+    </Label>
+
     <HBox spacing="10" alignment="CENTER_LEFT" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 10; -fx-border-color: #dcdde1;">
-        <TextField fx:id="txtName" promptText="Ονοματεπώνυμο" HBox.hgrow="ALWAYS" />
-        <TextField fx:id="txtPhone" promptText="Τηλέφωνο" prefWidth="150"/>
-        <TextField fx:id="txtAmka" promptText="ΑΜΚΑ" prefWidth="150"/>
-        <Button text="Αποθήκευση" onAction="#addPatient" style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-font-weight: bold;"/>
+        <TextField fx:id="txtLastName" promptText="ΕΠΙΘΕΤΟ" prefWidth="120" alignment="CENTER" />
+        <TextField fx:id="txtFirstName" promptText="ΟΝΟΜΑ" prefWidth="120" alignment="CENTER" />
+        <TextField fx:id="txtBirthDate" promptText="ΗΜ. ΓΕΝΝΗΣΗΣ (ΧΧ/ΧΧ/ΧΧΧΧ)" prefWidth="190" alignment="CENTER" />
+        <TextField fx:id="txtPhone" promptText="ΤΗΛΕΦΩΝΟ" prefWidth="120" alignment="CENTER" />
+        <TextField fx:id="txtAmka" promptText="ΑΜΚΑ" prefWidth="90" alignment="CENTER" />
+        <Button text="Αποθήκευση" onAction="#addPatient" style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand;"/>
     </HBox>
 
-    <TextField fx:id="searchField" promptText="🔍 Αναζήτηση ασθενή με όνομα ή ΑΜΚΑ..." style="-fx-pref-height: 35;"/>
+    <TextField fx:id="searchField" promptText="🔍 Αναζήτηση ασθενή με επίθετο ή ΑΜΚΑ..." style="-fx-pref-height: 35;"/>
 
-    <TableView fx:id="patientsTable" VBox.vgrow="ALWAYS">
+    <TableView fx:id="patientsTable" prefHeight="400.0" prefWidth="950.0" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn fx:id="colLastName" text="ΕΠΙΘΕΤΟ" minWidth="180.0" prefWidth="200.0" />
+            <TableColumn fx:id="colFirstName" text="ΟΝΟΜΑ" minWidth="150.0" prefWidth="170.0" />
+            <TableColumn fx:id="colBirthDate" text="ΗΜ. ΓΕΝΝΗΣΗΣ" minWidth="120.0" prefWidth="130.0" />
+            <TableColumn fx:id="colPhone" text="ΤΗΛΕΦΩΝΟ" minWidth="120.0" prefWidth="130.0" />
+            <TableColumn fx:id="colAmka" text="ΑΜΚΑ" minWidth="130.0" prefWidth="140.0" />
+            <TableColumn fx:id="colEdit" text="EDIT" maxWidth="60.0" minWidth="60.0" prefWidth="60.0" />
+            <TableColumn fx:id="colDelete" text="DELETE" maxWidth="70.0" minWidth="70.0" prefWidth="70.0" />
+        </columns>
+
         <columnResizePolicy>
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
         </columnResizePolicy>
-        <columns>
-            <TableColumn fx:id="colName" text="ΟΝΟΜΑΤΕΠΩΝΥΜΟ" minWidth="200" prefWidth="400"/>
-            <TableColumn fx:id="colPhone" text="ΤΗΛΕΦΩΝΟ" minWidth="120" prefWidth="180"/>
-            <TableColumn fx:id="colAmka" text="ΑΜΚΑ" minWidth="120" prefWidth="180"/>
-            <TableColumn fx:id="colAction" text="EDIT" minWidth="60" maxWidth="80" prefWidth="70" style="-fx-alignment: CENTER;"/>
-        </columns>
     </TableView>
 </VBox>

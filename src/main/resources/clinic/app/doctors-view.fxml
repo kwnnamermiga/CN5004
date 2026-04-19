@@ -3,36 +3,47 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
 
-<VBox spacing="20" style="-fx-background-color: #f8f9fa;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="clinic.app.DoctorController">
+<VBox spacing="10" style="-fx-background-color: #f8f9fa;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="clinic.app.DoctorController">
     <padding>
         <Insets top="20" right="20" bottom="20" left="20"/>
     </padding>
 
     <Label text="Διαχείριση Ιατρικού Προσωπικού" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;"/>
 
+    <Label fx:id="lblStatus" text="" style="-fx-font-weight: bold;">
+        <VBox.margin>
+            <Insets left="5" bottom="5" />
+        </VBox.margin>
+    </Label>
+
     <HBox spacing="10" alignment="CENTER_LEFT" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 10; -fx-border-color: #dcdde1;">
-        <TextField fx:id="txtName" promptText="Ονοματεπώνυμο" HBox.hgrow="ALWAYS" />
-        <TextField fx:id="txtSpecialty" promptText="Ειδικότητα" prefWidth="150"/>
-        <TextField fx:id="txtPhone" promptText="Τηλέφωνο" prefWidth="120"/>
+        <TextField fx:id="txtLastName" promptText="ΕΠΙΘΕΤΟ" prefWidth="120" alignment="CENTER" />
+        <TextField fx:id="txtFirstName" promptText="ΟΝΟΜΑ" prefWidth="120" alignment="CENTER" />
+        <ComboBox fx:id="comboSpecialty" promptText="ΕΙΔΙΚΟΤΗΤΑ" prefWidth="140" style="-fx-text-alignment: center; -fx-alignment: center;"  />
+        <TextField fx:id="txtPhone" promptText="ΤΗΛΕΦΩΝΟ" prefWidth="100" alignment="CENTER"/>
+
         <Label text="Χρώμα:"/>
-        <ColorPicker fx:id="colorPicker" />
-        <Button text="Αποθήκευση" onAction="#addDoctor" style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-weight: bold;"/>
+        <ColorPicker fx:id="colorPicker" style="-fx-cursor: hand;"/>
+
+        <Button text="Αποθήκευση" onAction="#addDoctor" style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand;"/>
     </HBox>
 
-    <TableView fx:id="doctorsTable" VBox.vgrow="ALWAYS">
+    <TextField fx:id="searchField" promptText="🔍 Αναζήτηση γιατρού με επίθετο ή ειδικότητα..." style="-fx-pref-height: 35;"/>
+
+    <TableView fx:id="doctorsTable" prefHeight="400.0" prefWidth="950.0" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn fx:id="colColor" text="ΧΡΩΜΑ" maxWidth="80.0" minWidth="60.0" prefWidth="70.0" />
+
+            <TableColumn fx:id="colLastName" text="ΕΠΙΘΕΤΟ" minWidth="150.0" prefWidth="180.0" />
+            <TableColumn fx:id="colFirstName" text="ΟΝΟΜΑ" minWidth="150.0" prefWidth="150.0" />
+            <TableColumn fx:id="colSpecialty" text="ΕΙΔΙΚΟΤΗΤΑ" minWidth="150.0" prefWidth="180.0" />
+            <TableColumn fx:id="colPhone" text="ΤΗΛΕΦΩΝΟ" minWidth="120.0" prefWidth="130.0" />
+            <TableColumn fx:id="colEdit" text="EDIT" maxWidth="60.0" minWidth="60.0" prefWidth="70.0" />
+            <TableColumn fx:id="colDelete" text="DELETE" maxWidth="70.0" minWidth="70.0" prefWidth="70.0" />
+        </columns>
+
         <columnResizePolicy>
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
         </columnResizePolicy>
-        <columns>
-            <TableColumn fx:id="colColor" text="ΧΡΩΜΑ" minWidth="60" maxWidth="80" prefWidth="70" style="-fx-alignment: CENTER;"/>
-
-            <TableColumn fx:id="colName" text="ΟΝΟΜΑΤΕΠΩΝΥΜΟ" minWidth="150" prefWidth="300" />
-
-            <TableColumn fx:id="colSpecialty" text="ΕΙΔΙΚΟΤΗΤΑ" minWidth="120" prefWidth="200" />
-
-            <TableColumn fx:id="colPhone" text="ΤΗΛΕΦΩΝΟ" minWidth="100" prefWidth="150" />
-
-            <TableColumn fx:id="colAction" text="EDIT" minWidth="60" maxWidth="80" prefWidth="70" style="-fx-alignment: CENTER;"/>
-        </columns>
     </TableView>
 </VBox>

@@ -3,34 +3,42 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
 
-<VBox spacing="15.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="clinic.app.AppointmentController" style="-fx-background-color: #f1f2f6; -fx-padding: 30;">
+<VBox spacing="15.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="clinic.app.AppointmentController"
+      style="-fx-background-color: #f1f2f6; -fx-padding: 30;">
 
-    <Label text="Διαχείριση Ραντεβού" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" />
+    <Label text="Διαχείριση Ραντεβού"
+           style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" />
 
-    <Label fx:id="notificationLabel" text="" visible="false" />
+    <Label fx:id="notificationLabel" text="" visible="false"
+           style="-fx-font-size: 14px; -fx-font-weight: bold;" />
 
-    <HBox alignment="CENTER_LEFT" spacing="10.0" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 10;">
+    <HBox alignment="CENTER_LEFT" spacing="10.0"
+          style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 10; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 0);">
         <children>
-            <DatePicker fx:id="datePicker" prefHeight="40.0" prefWidth="150.0" promptText="Ημερομηνία" />
-            <ComboBox fx:id="comboTime" prefHeight="40.0" prefWidth="110.0" promptText="Ώρα" />
-            <ComboBox fx:id="comboPatient" prefHeight="40.0" prefWidth="180.0" promptText="Ασθενής" />
-            <ComboBox fx:id="comboDoctor" prefHeight="40.0" prefWidth="180.0" promptText="Ιατρός" />
-            <Button onAction="#addAppointment" prefHeight="40.0" prefWidth="100.0" text="Κράτηση"
-                    style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand;" />
+            <DatePicker fx:id="datePicker" prefHeight="40.0" prefWidth="150.0" promptText="ΗΜΕΡΟΜΗΝΙΑ" />
+            <ComboBox fx:id="comboTime" prefHeight="40.0" prefWidth="110.0" promptText="ΩΡΑ" />
+            <ComboBox fx:id="comboPatient" prefHeight="40.0" prefWidth="120.0" promptText="ΑΣΘΕΝΗΣ" />
+            <ComboBox fx:id="comboDoctor" prefHeight="40.0" prefWidth="120.0" promptText="ΙΑΤΡΟΣ" />
+            <Button onAction="#addAppointment" prefHeight="40.0" prefWidth="120.0" text="ΚΡΑΤΗΣΗ"
+                    style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand; -fx-background-radius: 5;" />
         </children>
     </HBox>
 
-    <TableView fx:id="appointmentsTable" VBox.vgrow="ALWAYS" stylesheets="@style.css">
+    <TableView fx:id="appointmentsTable" VBox.vgrow="ALWAYS"
+               style="-fx-background-radius: 10; -fx-overflow-x: hidden;">
         <columns>
-            <TableColumn fx:id="colDate" text="ΗΜΕΡΟΜΗΝΙΑ" />
-            <TableColumn fx:id="colTime" text="ΩΡΑ" />
-            <TableColumn fx:id="colPatient" text="ΑΣΘΕΝΗΣ" />
-            <TableColumn fx:id="colDoctor" text="ΙΑΤΡΟΣ" />
+            <TableColumn fx:id="colDate" text="ΗΜΕΡΟΜΗΝΙΑ" prefWidth="120" />
+            <TableColumn fx:id="colTime" text="ΩΡΑ" prefWidth="80" />
+            <TableColumn fx:id="colPatient" text="ΑΣΘΕΝΗΣ" prefWidth="200" />
+            <TableColumn fx:id="colDoctor" text="ΙΑΤΡΟΣ" prefWidth="200" />
 
-            <TableColumn fx:id="colEdit" text="EDIT" maxWidth="60" minWidth="60" />
-
-            <TableColumn fx:id="colDelete" text="DELETE" maxWidth="60" minWidth="60" />
+            <TableColumn fx:id="colEdit" text="EDIT" maxWidth="60" minWidth="60" resizable="false" />
+            <TableColumn fx:id="colDelete" text="DELETE" maxWidth="60" minWidth="60" resizable="false" />
         </columns>
+        <columnResizePolicy>
+            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+        </columnResizePolicy>
     </TableView>
 
 </VBox>

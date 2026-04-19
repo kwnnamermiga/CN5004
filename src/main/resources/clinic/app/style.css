@@ -57,3 +57,11 @@
 .column-header .label {
     -fx-alignment: CENTER;
 }
+
+.combo-box {
+    -fx-alignment: center;
+}
+
+.combo-box .list-cell {
+    -fx-alignment: center;
+}
