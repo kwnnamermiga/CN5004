@@ -19,8 +19,10 @@ public class DashboardController {
     @FXML private DatePicker dateFrom, dateTo;
     @FXML private Label lblTotalDoctors, lblTotalPatients, lblRangeAppts;
 
-    // Νέα Στοιχεία Σχολίων
+    // Στοιχεία Σχολίων - Προστέθηκε ο νέος DatePicker
+    @FXML private DatePicker commentsDatePicker;
     @FXML private ListView<String> listComments;
+
     @FXML private TableView<DoctorAttendance> attendanceTable;
     @FXML private TableColumn<DoctorAttendance, String> colAttendanceName;
     @FXML private TableColumn<DoctorAttendance, CheckBox> colAttendanceStatus;
@@ -43,19 +45,24 @@ public class DashboardController {
 
         setupRowFactory();
 
-        // 3. Αρχικοποίηση
+        // 3. Αρχικοποίηση Ημερομηνιών
         dateFrom.setValue(LocalDate.now());
         dateTo.setValue(LocalDate.now());
+        commentsDatePicker.setValue(LocalDate.now()); // Προεπιλογή σήμερα για τα σχόλια
 
         refreshDashboard();
-        loadAttendanceList(); // Φόρτωση γιατρών στο παρουσιολόγιο
+        loadAttendanceList();
 
-        // Listeners
-        dateFrom.valueProperty().addListener((obs, oldVal, newVal) -> {
-            loadDataByRange();
-            loadDailyComments(); // Φόρτωση σχολίων για τη νέα ημερομηνία
-        });
+        // --- Listeners ---
+
+        // Listener για τα ραντεβού
+        dateFrom.valueProperty().addListener((obs, oldVal, newVal) -> loadDataByRange());
         dateTo.valueProperty().addListener((obs, oldVal, newVal) -> loadDataByRange());
+
+        // ΝΕΟΣ Listener: Φόρτωση σχολίων μόνο όταν αλλάζει το ημερολόγιο των σχολίων
+        commentsDatePicker.valueProperty().addListener((obs, oldVal, newVal) -> {
+            loadDailyComments();
+        });
 
         dailyTable.setItems(dailyList);
         attendanceTable.setItems(attendanceList);
@@ -111,13 +118,16 @@ public class DashboardController {
         if (lblRangeAppts != null) lblRangeAppts.setText(String.valueOf(dailyList.size()));
     }
 
-    // --- ΛΕΙΤΟΥΡΓΙΕΣ ΣΧΟΛΙΩΝ ---
+    // --- ΛΕΙΤΟΥΡΓΙΕΣ ΣΧΟΛΙΩΝ (ΕΝΗΜΕΡΩΜΕΝΕΣ) ---
 
     @FXML
     private void addComment() {
+        LocalDate selectedDate = commentsDatePicker.getValue();
+        if (selectedDate == null) return;
+
         TextInputDialog dialog = new TextInputDialog();
         dialog.setTitle("Νέα Σημείωση");
-        dialog.setHeaderText("Εισάγετε μια νέα σημείωση για τη σημερινή ημέρα:");
+        dialog.setHeaderText("Σημείωση για την ημερομηνία: " + selectedDate.format(formatter));
         dialog.setContentText("Σημείωση:");
 
         Optional<String> result = dialog.showAndWait();
@@ -136,7 +146,7 @@ public class DashboardController {
 
         TextInputDialog dialog = new TextInputDialog(selected);
         dialog.setTitle("Επεξεργασία Σημείωσης");
-        dialog.setHeaderText("Τροποποιήστε τη σημείωση:");
+        dialog.setHeaderText("Τροποποίηση σημείωσης για: " + commentsDatePicker.getValue().format(formatter));
         dialog.setContentText("Σημείωση:");
 
         Optional<String> result = dialog.showAndWait();
@@ -157,7 +167,7 @@ public class DashboardController {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Διαγραφή Σημείωσης");
         alert.setHeaderText(null);
-        alert.setContentText("Είστε σίγουροι ότι θέλετε να διαγράψετε αυτή τη σημείωση;");
+        alert.setContentText("Θέλετε να διαγράψετε τη σημείωση από την ημερομηνία " + commentsDatePicker.getValue().format(formatter) + ";");
 
         if (alert.showAndWait().get() == ButtonType.OK) {
             commentsList.remove(selected);
@@ -166,9 +176,13 @@ public class DashboardController {
     }
 
     private void saveDailyComments() {
-        if (dateFrom.getValue() == null) return;
-        String dateKey = dateFrom.getValue().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
-        try (PrintWriter pw = new PrintWriter(new OutputStreamWriter(new FileOutputStream("comments_" + dateKey + ".txt"), StandardCharsets.UTF_8))) {
+        if (commentsDatePicker.getValue() == null) return;
+
+        // Χρήση του commentsDatePicker για το όνομα του αρχείου
+        String dateKey = commentsDatePicker.getValue().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+        File f = new File("comments_" + dateKey + ".txt");
+
+        try (PrintWriter pw = new PrintWriter(new OutputStreamWriter(new FileOutputStream(f), StandardCharsets.UTF_8))) {
             for (String comment : commentsList) {
                 pw.println(comment);
             }
@@ -177,9 +191,12 @@ public class DashboardController {
 
     private void loadDailyComments() {
         commentsList.clear();
-        if (dateFrom.getValue() == null) return;
-        String dateKey = dateFrom.getValue().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+        if (commentsDatePicker.getValue() == null) return;
+
+        // Φόρτωση βάσει του νέου DatePicker
+        String dateKey = commentsDatePicker.getValue().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
         File f = new File("comments_" + dateKey + ".txt");
+
         if (f.exists()) {
             try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(f), StandardCharsets.UTF_8))) {
                 String line;
@@ -217,7 +234,8 @@ public class DashboardController {
                 if (item == null || empty) setStyle("");
                 else {
                     String color = item.getDoctorColor();
-                    setStyle("-fx-background-color: " + color + "; -fx-border-color: #dcdde1; -fx-border-width: 0 0 1 0;");
+                    // Πρόσθεσα "44" για ελαφριά διαφάνεια ώστε να είναι πιο ευανάγνωστο
+                    setStyle("-fx-background-color: " + color + "44; -fx-border-color: #dcdde1; -fx-border-width: 0 0 1 0;");
                 }
             }
         });

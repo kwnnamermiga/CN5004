@@ -51,7 +51,11 @@
     <HBox spacing="20" prefHeight="250">
         <children>
             <VBox spacing="10" HBox.hgrow="ALWAYS" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 10; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 0);">
-                <Label text="📝 ΣΗΜΕΙΩΣΕΙΣ ΓΡΑΜΜΑΤΕΙΑΣ" style="-fx-font-weight: bold; -fx-text-fill: #2c3e50;" />
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <Label text="📝 ΣΗΜΕΙΩΣΕΙΣ ΓΡΑΜΜΑΤΕΙΑΣ" style="-fx-font-weight: bold; -fx-text-fill: #2c3e50;" />
+                    <Region HBox.hgrow="ALWAYS" />
+                    <DatePicker fx:id="commentsDatePicker" prefWidth="130" style="-fx-font-size: 11px;" />
+                </HBox>
                 <ListView fx:id="listComments" VBox.vgrow="ALWAYS" />
                 <HBox spacing="10">
                     <Button text="ΠΡΟΣΘΗΚΗ" onAction="#addComment" HBox.hgrow="ALWAYS" maxWidth="Infinity" style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-cursor: hand; -fx-font-weight: bold;" />
