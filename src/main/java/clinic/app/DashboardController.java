@@ -234,9 +234,7 @@ public class DashboardController {
                 if (item == null || empty) setStyle("");
                 else {
                     String color = item.getDoctorColor();
-                    // Πρόσθεσα "44" για ελαφριά διαφάνεια ώστε να είναι πιο ευανάγνωστο
-                    setStyle("-fx-background-color: " + color + "44; -fx-border-color: #dcdde1; -fx-border-width: 0 0 1 0;");
-                }
+                    setStyle("-fx-background-color: " + color + "; -fx-border-color: #dcdde1; -fx-border-width: 0 0 1 0;");                }
             }
         });
     }

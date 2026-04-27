@@ -40,7 +40,7 @@ public class AppointmentController {
         setupEditColumn();
         setupRowFactory();
 
-        // 3. Αρχικοποίηση Time ComboBox (08:00 έως 21:00 με 5-λεπτα διαστήματα)
+        // 3. Αρχικοποίηση Time ComboBox
         ObservableList<String> times = FXCollections.observableArrayList();
         for (int h = 8; h <= 21; h++) {
             for (int m = 0; m < 60; m += 5) {
@@ -130,7 +130,9 @@ public class AppointmentController {
         String date = datePicker.getValue().format(formatter);
         String time = comboTime.getValue();
         String doctor = comboDoctor.getValue();
+        String patient = comboPatient.getValue(); // Πάρε το όνομα του ασθενή
 
+        // ΕΛΕΓΧΟΣ 1: Διαθεσιμότητα Γιατρού (Το είχες ήδη)
         for (Appointment app : appointmentList) {
             if (app.getDate().equals(date) && app.getTime().equals(time) && app.getDoctorName().equals(doctor)) {
                 showNotification("Η ώρα είναι ήδη πιασμένη για αυτόν τον γιατρό!", "#e74c3c");
@@ -138,7 +140,14 @@ public class AppointmentController {
             }
         }
 
-        Appointment newApp = new Appointment(date, time, comboPatient.getValue(), doctor, getDoctorColor(doctor));
+        // ΕΛΕΓΧΟΣ 2: ΝΕΟΣ ΠΕΡΙΟΡΙΣΜΟΣ (Διαθεσιμότητα Ασθενή - 30 λεπτά)
+        if (isPatientBusy(patient, date, time)) {
+            showNotification("Ο ασθενής έχει άλλο ραντεβού σε λιγότερο από 30 λεπτά!", "#e74c3c");
+            return;
+        }
+
+        // Αν περάσει τους ελέγχους, προχωράει στην αποθήκευση
+        Appointment newApp = new Appointment(date, time, patient, doctor, getDoctorColor(doctor));
         appointmentList.add(newApp);
         save();
         clearFields();
@@ -209,7 +218,7 @@ public class AppointmentController {
                 deleteBtn.setStyle("-fx-background-color: transparent; -fx-text-fill: #e74c3c; -fx-cursor: hand;");
                 deleteBtn.setOnAction(event -> {
                     Appointment app = getTableView().getItems().get(getIndex());
-                    
+
                     Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                     alert.setTitle("Επιβεβαίωση Διαγραφής");
                     alert.setHeaderText(null);
@@ -311,5 +320,27 @@ public class AppointmentController {
                 }
             }
         });
+    }
+
+    private int timeToMinutes(String timeStr) {
+        String[] parts = timeStr.split(":");
+        int hours = Integer.parseInt(parts[0].trim());
+        int minutes = Integer.parseInt(parts[1].trim());
+        return (hours * 60) + minutes;
+    }
+
+    private boolean isPatientBusy(String patient, String date, String newTime) {
+        int newTimeMin = timeToMinutes(newTime);
+        for (Appointment app : appointmentList) {
+            // Αν είναι ο ίδιος ασθενής την ίδια μέρα
+            if (app.getPatientName().equals(patient) && app.getDate().equals(date)) {
+                int existingTimeMin = timeToMinutes(app.getTime());
+                // Math.abs για να ελέγχουμε και πριν και μετά το ραντεβού
+                if (Math.abs(newTimeMin - existingTimeMin) < 30) {
+                    return true; // Υπάρχει σύγκρουση (λιγότερο από 30 λεπτά)
+                }
+            }
+        }
+        return false;
     }
 }
