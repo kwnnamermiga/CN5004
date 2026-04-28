@@ -33,7 +33,6 @@
         <Label text="Έως:" />
         <DatePicker fx:id="dateTo" prefWidth="150" />
         <Region HBox.hgrow="ALWAYS" />
-        <Button text="Ανανέωση" onAction="#refreshDashboard" style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-cursor: hand; -fx-font-weight: bold;" />
     </HBox>
 
     <TableView fx:id="dailyTable" VBox.vgrow="ALWAYS" prefHeight="300">
@@ -68,6 +67,10 @@
                 <HBox spacing="10" alignment="CENTER_LEFT">
                     <Label text="👨‍⚕️ ΠΑΡΟΥΣΙΟΛΟΓΙΟ ΓΙΑΤΡΩΝ" style="-fx-font-weight: bold; -fx-text-fill: #2c3e50;" />
                     <Region HBox.hgrow="ALWAYS" />
+
+                    <!-- ΕΔΩ ΜΠΑΙΝΕΙ ΤΟ LABEL ΓΙΑ ΤΟ ΜΗΝΥΜΑ -->
+                    <Label fx:id="notificationAttendanceLabel" visible="false" style="-fx-font-size: 11px; -fx-font-weight: bold;" />
+
                     <Button fx:id="btnSaveAttendance" onAction="#saveAttendanceClick" text="ΑΠΟΘΗΚΕΥΣΗ"
                             style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-cursor: hand; -fx-font-size: 10px; -fx-font-weight: bold;" />
                 </HBox>
@@ -85,3 +88,4 @@
     </HBox>
 
 </VBox>
+

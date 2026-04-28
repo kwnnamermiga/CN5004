@@ -17,7 +17,7 @@ public class DashboardController {
     @FXML private TableView<Appointment> dailyTable;
     @FXML private TableColumn<Appointment, String> colDate, colTime, colPatient, colDoctor;
     @FXML private DatePicker dateFrom, dateTo;
-    @FXML private Label lblTotalDoctors, lblTotalPatients, lblRangeAppts;
+    @FXML private Label lblTotalDoctors, lblTotalPatients, lblRangeAppts, notificationAttendanceLabel;
 
     // Στοιχεία Σχολίων
     @FXML private DatePicker commentsDatePicker;
@@ -75,12 +75,23 @@ public class DashboardController {
     @FXML
     private void saveAttendanceClick() {
         saveAttendanceToFile();
+        // Εμφάνιση του μηνύματος αντί για Alert
+        showAttendanceNotification("Αποθηκεύτηκε!", "#27ae60");
+    }
 
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Αποθήκευση");
-        alert.setHeaderText(null);
-        alert.setContentText("Το παρουσιολόγιο γιατρών αποθηκεύτηκε επιτυχώς!");
-        alert.showAndWait();
+    private void showAttendanceNotification(String message, String color) {
+        notificationAttendanceLabel.setText(message);
+        notificationAttendanceLabel.setStyle("-fx-text-fill: " + color + "; -fx-font-weight: bold;");
+        notificationAttendanceLabel.setOpacity(1.0); // Σιγουρευόμαστε ότι είναι ορατό στην αρχή
+        notificationAttendanceLabel.setVisible(true);
+
+        // Δημιουργία του εφέ Fade (σβήσιμο)
+        javafx.animation.FadeTransition ft = new javafx.animation.FadeTransition(javafx.util.Duration.seconds(2), notificationAttendanceLabel);
+        ft.setFromValue(1.0);
+        ft.setToValue(0.0);
+        ft.setDelay(javafx.util.Duration.seconds(1)); // Μένει ορατό για 1 δευτερόλεπτο και μετά ξεκινά να σβήνει
+        ft.setOnFinished(e -> notificationAttendanceLabel.setVisible(false));
+        ft.play();
     }
 
     private void saveAttendanceToFile() {
