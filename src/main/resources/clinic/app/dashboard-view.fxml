@@ -67,9 +67,9 @@
                 </HBox>
                 <ListView fx:id="listComments" VBox.vgrow="ALWAYS" />
                 <HBox spacing="5">
-                    <Button onAction="#addComment" text="+" prefWidth="35" style="-fx-background-color: #27ae60; -fx-text-fill: white;" />
-                    <Button onAction="#editComment" text="EDIT" HBox.hgrow="ALWAYS" maxWidth="Infinity" style="-fx-background-color: #f39c12; -fx-text-fill: white; -fx-font-size: 10px;" />
-                    <Button onAction="#deleteComment" text="DEL" HBox.hgrow="ALWAYS" maxWidth="Infinity" style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-font-size: 10px;" />
+                    <Button onAction="#addComment" text="ΠΡΟΣΘΗΚΗ" prefWidth="35" style="-fx-background-color: #27ae60; -fx-text-fill: white;" />
+                    <Button onAction="#editComment" text="ΕΠΕΞΕΡΓΑΣΙΑ" HBox.hgrow="ALWAYS" maxWidth="Infinity" style="-fx-background-color: #f39c12; -fx-text-fill: white; -fx-font-size: 10px;" />
+                    <Button onAction="#deleteComment" text="ΔΙΑΓΡΑΦΗ" HBox.hgrow="ALWAYS" maxWidth="Infinity" style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-font-size: 10px;" />
                 </HBox>
             </VBox>
 
