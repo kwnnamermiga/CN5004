@@ -53,6 +53,9 @@
 
             <!-- 1. ΣΗΜΕΙΩΣΕΙΣ: Καταλαμβάνει το 26% (Ημερομηνία + Ώρα) -->
             <VBox spacing="10" HBox.hgrow="ALWAYS" maxWidth="Infinity" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 10 0 0 10; -fx-border-color: #dcdde1; -fx-border-width: 1 1 1 1; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 0);">
+                <HBox alignment="CENTER_RIGHT" minHeight="20">
+                    <Label fx:id="notificationNotesLabel" visible="false" style="-fx-font-size: 11px; -fx-font-weight: bold;" />
+                </HBox>
                 <!-- Εδώ μειώνουμε το maxWidth δυναμικά για να ταιριάξει με τις 2 πρώτες στήλες -->
                 <minWidth><Region fx:constant="USE_PREF_SIZE" /></minWidth>
                 <prefWidth>300</prefWidth> <!-- Αυτό θα το ρυθμίσουμε αν χρειαστεί -->

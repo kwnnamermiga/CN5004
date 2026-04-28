@@ -17,7 +17,7 @@ public class DashboardController {
     @FXML private TableView<Appointment> dailyTable;
     @FXML private TableColumn<Appointment, String> colDate, colTime, colPatient, colDoctor;
     @FXML private DatePicker dateFrom, dateTo;
-    @FXML private Label lblTotalDoctors, lblTotalPatients, lblRangeAppts, notificationAttendanceLabel;
+    @FXML private Label lblTotalDoctors, lblTotalPatients, lblRangeAppts, notificationAttendanceLabel, notificationNotesLabel;
 
     // Στοιχεία Σχολίων
     @FXML private DatePicker commentsDatePicker;
@@ -201,6 +201,7 @@ public class DashboardController {
             if (!comment.trim().isEmpty()) {
                 commentsList.add(comment.trim());
                 saveDailyComments();
+                showNotesNotification("Προστέθηκε!", "#27ae60"); // <-- ΠΡΟΣΘΕΣΕ ΑΥΤΟ
             }
         });
     }
@@ -221,6 +222,7 @@ public class DashboardController {
                 int index = listComments.getSelectionModel().getSelectedIndex();
                 commentsList.set(index, comment.trim());
                 saveDailyComments();
+                showNotesNotification("Ενημερώθηκε!", "#f39c12"); // <-- ΠΡΟΣΘΕΣΕ ΑΥΤΟ
             }
         });
     }
@@ -238,6 +240,7 @@ public class DashboardController {
         if (alert.showAndWait().get() == ButtonType.OK) {
             commentsList.remove(selected);
             saveDailyComments();
+            showNotesNotification("Διαγράφηκε!", "#e74c3c"); // <-- ΠΡΟΣΘΕΣΕ ΑΥΤΟ
         }
     }
 
@@ -277,5 +280,19 @@ public class DashboardController {
                 }
             }
         });
+    }
+
+    private void showNotesNotification(String message, String color) {
+        notificationNotesLabel.setText(message);
+        notificationNotesLabel.setStyle("-fx-text-fill: " + color + "; -fx-font-weight: bold;");
+        notificationNotesLabel.setOpacity(1.0);
+        notificationNotesLabel.setVisible(true);
+
+        javafx.animation.FadeTransition ft = new javafx.animation.FadeTransition(javafx.util.Duration.seconds(2), notificationNotesLabel);
+        ft.setFromValue(1.0);
+        ft.setToValue(0.0);
+        ft.setDelay(javafx.util.Duration.seconds(1));
+        ft.setOnFinished(e -> notificationNotesLabel.setVisible(false));
+        ft.play();
     }
 }
