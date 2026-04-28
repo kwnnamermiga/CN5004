@@ -35,6 +35,19 @@ public class AppointmentController {
         colPatient.setCellValueFactory(new PropertyValueFactory<>("patientName"));
         colDoctor.setCellValueFactory(new PropertyValueFactory<>("doctorName"));
 
+        datePicker.setDayCellFactory(picker -> new DateCell() {
+            @Override
+            public void updateItem(LocalDate date, boolean empty) {
+                super.updateItem(date, empty);
+                // Αν η ημερομηνία είναι πριν από σήμερα, την απενεργοποιούμε
+                if (date != null && date.isBefore(LocalDate.now())) {
+                    setDisable(true);
+                    setStyle("-fx-background-color: #f1f2f6; -fx-text-fill: #bdc3c7;");
+                }
+            }
+        });
+
+        
         // 2. Ρυθμίσεις Πίνακα
         setupDeleteColumn();
         setupEditColumn();
