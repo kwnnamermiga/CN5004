@@ -19,7 +19,7 @@ public class DashboardController {
     @FXML private DatePicker dateFrom, dateTo;
     @FXML private Label lblTotalDoctors, lblTotalPatients, lblRangeAppts;
 
-    // Στοιχεία Σχολίων - Προστέθηκε ο νέος DatePicker
+    // Στοιχεία Σχολίων
     @FXML private DatePicker commentsDatePicker;
     @FXML private ListView<String> listComments;
 
@@ -48,21 +48,15 @@ public class DashboardController {
         // 3. Αρχικοποίηση Ημερομηνιών
         dateFrom.setValue(LocalDate.now());
         dateTo.setValue(LocalDate.now());
-        commentsDatePicker.setValue(LocalDate.now()); // Προεπιλογή σήμερα για τα σχόλια
+        commentsDatePicker.setValue(LocalDate.now());
 
         refreshDashboard();
-        loadAttendanceList();
+        loadAttendanceList(); // Φορτώνει γιατρούς ΚΑΙ status παρουσιολογίου
 
         // --- Listeners ---
-
-        // Listener για τα ραντεβού
         dateFrom.valueProperty().addListener((obs, oldVal, newVal) -> loadDataByRange());
         dateTo.valueProperty().addListener((obs, oldVal, newVal) -> loadDataByRange());
-
-        // ΝΕΟΣ Listener: Φόρτωση σχολίων μόνο όταν αλλάζει το ημερολόγιο των σχολίων
-        commentsDatePicker.valueProperty().addListener((obs, oldVal, newVal) -> {
-            loadDailyComments();
-        });
+        commentsDatePicker.valueProperty().addListener((obs, oldVal, newVal) -> loadDailyComments());
 
         dailyTable.setItems(dailyList);
         attendanceTable.setItems(attendanceList);
@@ -75,6 +69,69 @@ public class DashboardController {
         updateStats();
         loadDailyComments();
     }
+
+    // --- ΛΕΙΤΟΥΡΓΙΕΣ ΠΑΡΟΥΣΙΟΛΟΓΙΟΥ (ΕΝΗΜΕΡΩΜΕΝΟ) ---
+
+    @FXML
+    private void saveAttendanceClick() {
+        saveAttendanceToFile();
+
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Αποθήκευση");
+        alert.setHeaderText(null);
+        alert.setContentText("Το παρουσιολόγιο γιατρών αποθηκεύτηκε επιτυχώς!");
+        alert.showAndWait();
+    }
+
+    private void saveAttendanceToFile() {
+        try (PrintWriter pw = new PrintWriter(new OutputStreamWriter(
+                new FileOutputStream("doctorattendance.txt"), StandardCharsets.UTF_8))) {
+            for (DoctorAttendance da : attendanceList) {
+                pw.println(da.getName() + "," + da.isPresent());
+            }
+        } catch (Exception e) { e.printStackTrace(); }
+    }
+
+    private void loadAttendanceList() {
+        attendanceList.clear();
+
+        // 1. Διάβασμα όλων των γιατρών
+        File docsFile = new File("doctors.txt");
+        if (!docsFile.exists()) return;
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(docsFile), StandardCharsets.UTF_8))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] p = line.split(",");
+                if (p.length >= 2) {
+                    String name = p[0].trim() + " " + p[1].trim();
+                    attendanceList.add(new DoctorAttendance(name));
+                }
+            }
+        } catch (Exception e) { e.printStackTrace(); }
+
+        // 2. Ενημέρωση των CheckBoxes από το αρχείο doctorattendance.txt
+        File attFile = new File("doctorattendance.txt");
+        if (attFile.exists()) {
+            try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(attFile), StandardCharsets.UTF_8))) {
+                String line;
+                while ((line = br.readLine()) != null) {
+                    String[] p = line.split(",");
+                    if (p.length >= 2) {
+                        String savedName = p[0].trim();
+                        boolean isPresent = Boolean.parseBoolean(p[1].trim());
+                        for (DoctorAttendance da : attendanceList) {
+                            if (da.getName().equalsIgnoreCase(savedName)) {
+                                da.setPresent(isPresent);
+                                break;
+                            }
+                        }
+                    }
+                }
+            } catch (Exception e) { e.printStackTrace(); }
+        }
+    }
+
+    // --- ΛΟΙΠΕΣ ΛΕΙΤΟΥΡΓΙΕΣ (ΣΤΑΤΙΣΤΙΚΑ, ΡΑΝΤΕΒΟΥ, ΣΧΟΛΙΑ) ---
 
     private void updateStats() {
         lblTotalDoctors.setText(String.valueOf(countLines("doctors.txt")));
@@ -117,8 +174,6 @@ public class DashboardController {
         } catch (Exception e) { e.printStackTrace(); }
         if (lblRangeAppts != null) lblRangeAppts.setText(String.valueOf(dailyList.size()));
     }
-
-    // --- ΛΕΙΤΟΥΡΓΙΕΣ ΣΧΟΛΙΩΝ (ΕΝΗΜΕΡΩΜΕΝΕΣ) ---
 
     @FXML
     private void addComment() {
@@ -167,7 +222,7 @@ public class DashboardController {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Διαγραφή Σημείωσης");
         alert.setHeaderText(null);
-        alert.setContentText("Θέλετε να διαγράψετε τη σημείωση από την ημερομηνία " + commentsDatePicker.getValue().format(formatter) + ";");
+        alert.setContentText("Θέλετε να διαγράψετε τη σημείωση;");
 
         if (alert.showAndWait().get() == ButtonType.OK) {
             commentsList.remove(selected);
@@ -177,53 +232,26 @@ public class DashboardController {
 
     private void saveDailyComments() {
         if (commentsDatePicker.getValue() == null) return;
-
-        // Χρήση του commentsDatePicker για το όνομα του αρχείου
         String dateKey = commentsDatePicker.getValue().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
         File f = new File("comments_" + dateKey + ".txt");
-
         try (PrintWriter pw = new PrintWriter(new OutputStreamWriter(new FileOutputStream(f), StandardCharsets.UTF_8))) {
-            for (String comment : commentsList) {
-                pw.println(comment);
-            }
+            for (String comment : commentsList) pw.println(comment);
         } catch (Exception e) { e.printStackTrace(); }
     }
 
     private void loadDailyComments() {
         commentsList.clear();
         if (commentsDatePicker.getValue() == null) return;
-
-        // Φόρτωση βάσει του νέου DatePicker
         String dateKey = commentsDatePicker.getValue().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
         File f = new File("comments_" + dateKey + ".txt");
-
         if (f.exists()) {
             try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(f), StandardCharsets.UTF_8))) {
                 String line;
                 while ((line = br.readLine()) != null) {
-                    if (!line.trim().isEmpty()) {
-                        commentsList.add(line);
-                    }
+                    if (!line.trim().isEmpty()) commentsList.add(line);
                 }
             } catch (Exception e) { e.printStackTrace(); }
         }
-    }
-
-    // --- ΛΕΙΤΟΥΡΓΙΕΣ ΠΑΡΟΥΣΙΟΛΟΓΙΟΥ ---
-    private void loadAttendanceList() {
-        attendanceList.clear();
-        File file = new File("doctors.txt");
-        if (!file.exists()) return;
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8))) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                String[] p = line.split(",");
-                if (p.length >= 2) {
-                    String name = p[0].trim() + " " + p[1].trim();
-                    attendanceList.add(new DoctorAttendance(name));
-                }
-            }
-        } catch (Exception e) { e.printStackTrace(); }
     }
 
     private void setupRowFactory() {
@@ -234,7 +262,8 @@ public class DashboardController {
                 if (item == null || empty) setStyle("");
                 else {
                     String color = item.getDoctorColor();
-                    setStyle("-fx-background-color: " + color + "; -fx-border-color: #dcdde1; -fx-border-width: 0 0 1 0;");                }
+                    setStyle("-fx-background-color: " + color + "; -fx-border-color: #dcdde1; -fx-border-width: 0 0 1 0;");
+                }
             }
         });
     }

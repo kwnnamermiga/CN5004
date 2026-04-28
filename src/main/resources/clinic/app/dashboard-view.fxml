@@ -65,7 +65,12 @@
             </VBox>
 
             <VBox spacing="10" prefWidth="350" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 10; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 0);">
-                <Label text="👨‍⚕️ ΠΑΡΟΥΣΙΟΛΟΓΙΟ ΓΙΑΤΡΩΝ" style="-fx-font-weight: bold; -fx-text-fill: #2c3e50;" />
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <Label text="👨‍⚕️ ΠΑΡΟΥΣΙΟΛΟΓΙΟ ΓΙΑΤΡΩΝ" style="-fx-font-weight: bold; -fx-text-fill: #2c3e50;" />
+                    <Region HBox.hgrow="ALWAYS" />
+                    <Button fx:id="btnSaveAttendance" onAction="#saveAttendanceClick" text="ΑΠΟΘΗΚΕΥΣΗ"
+                            style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-cursor: hand; -fx-font-size: 10px; -fx-font-weight: bold;" />
+                </HBox>
                 <TableView fx:id="attendanceTable" VBox.vgrow="ALWAYS">
                     <columns>
                         <TableColumn fx:id="colAttendanceName" text="ΓΙΑΤΡΟΣ" prefWidth="200" />

@@ -13,4 +13,13 @@ public class DoctorAttendance {
 
     public String getName() { return name; }
     public CheckBox getStatus() { return status; }
+
+
+    public boolean isPresent() {
+        return status.isSelected();
+    }
+
+    public void setPresent(boolean value) {
+        status.setSelected(value);
+    }
 }
