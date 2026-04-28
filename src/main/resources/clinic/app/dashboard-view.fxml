@@ -47,42 +47,52 @@
         </columnResizePolicy>
     </TableView>
 
-    <HBox spacing="20" prefHeight="250">
+    <!-- Αυτό το HBox θα απλωθεί σε όλο το πλάτος, όπως ο πίνακας -->
+    <HBox spacing="0" VBox.vgrow="NEVER" prefHeight="320">
         <children>
-            <VBox spacing="10" HBox.hgrow="ALWAYS" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 10; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 0);">
+
+            <!-- 1. ΣΗΜΕΙΩΣΕΙΣ: Καταλαμβάνει το 26% (Ημερομηνία + Ώρα) -->
+            <VBox spacing="10" HBox.hgrow="ALWAYS" maxWidth="Infinity" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 10 0 0 10; -fx-border-color: #dcdde1; -fx-border-width: 1 1 1 1; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 0);">
+                <!-- Εδώ μειώνουμε το maxWidth δυναμικά για να ταιριάξει με τις 2 πρώτες στήλες -->
+                <minWidth><Region fx:constant="USE_PREF_SIZE" /></minWidth>
+                <prefWidth>300</prefWidth> <!-- Αυτό θα το ρυθμίσουμε αν χρειαστεί -->
+
                 <HBox spacing="10" alignment="CENTER_LEFT">
-                    <Label text="📝 ΣΗΜΕΙΩΣΕΙΣ ΓΡΑΜΜΑΤΕΙΑΣ" style="-fx-font-weight: bold; -fx-text-fill: #2c3e50;" />
+                    <Label text="📝 ΣΗΜΕΙΩΣΕΙΣ" style="-fx-font-weight: bold; -fx-font-size: 13px;" />
                     <Region HBox.hgrow="ALWAYS" />
-                    <DatePicker fx:id="commentsDatePicker" prefWidth="130" style="-fx-font-size: 11px;" />
+                    <DatePicker fx:id="commentsDatePicker" prefWidth="110" style="-fx-font-size: 10px;" />
                 </HBox>
                 <ListView fx:id="listComments" VBox.vgrow="ALWAYS" />
-                <HBox spacing="10">
-                    <Button text="ΠΡΟΣΘΗΚΗ" onAction="#addComment" HBox.hgrow="ALWAYS" maxWidth="Infinity" style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-cursor: hand; -fx-font-weight: bold;" />
-                    <Button text="ΕΠΕΞΕΡΓΑΣΙΑ" onAction="#editComment" HBox.hgrow="ALWAYS" maxWidth="Infinity" style="-fx-background-color: #f39c12; -fx-text-fill: white; -fx-cursor: hand; -fx-font-weight: bold;" />
-                    <Button text="ΔΙΑΓΡΑΦΗ" onAction="#deleteComment" HBox.hgrow="ALWAYS" maxWidth="Infinity" style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-cursor: hand; -fx-font-weight: bold;" />
+                <HBox spacing="5">
+                    <Button onAction="#addComment" text="+" prefWidth="35" style="-fx-background-color: #27ae60; -fx-text-fill: white;" />
+                    <Button onAction="#editComment" text="EDIT" HBox.hgrow="ALWAYS" maxWidth="Infinity" style="-fx-background-color: #f39c12; -fx-text-fill: white; -fx-font-size: 10px;" />
+                    <Button onAction="#deleteComment" text="DEL" HBox.hgrow="ALWAYS" maxWidth="Infinity" style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-font-size: 10px;" />
                 </HBox>
             </VBox>
 
-            <VBox spacing="10" prefWidth="350" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 10; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 0);">
-                <HBox spacing="10" alignment="CENTER_LEFT">
-                    <Label text="👨‍⚕️ ΠΑΡΟΥΣΙΟΛΟΓΙΟ ΓΙΑΤΡΩΝ" style="-fx-font-weight: bold; -fx-text-fill: #2c3e50;" />
-                    <Region HBox.hgrow="ALWAYS" />
-
-                    <!-- ΕΔΩ ΜΠΑΙΝΕΙ ΤΟ LABEL ΓΙΑ ΤΟ ΜΗΝΥΜΑ -->
-                    <Label fx:id="notificationAttendanceLabel" visible="false" style="-fx-font-size: 11px; -fx-font-weight: bold;" />
-
-                    <Button fx:id="btnSaveAttendance" onAction="#saveAttendanceClick" text="ΑΠΟΘΗΚΕΥΣΗ"
-                            style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-cursor: hand; -fx-font-size: 10px; -fx-font-weight: bold;" />
-                </HBox>
-                <TableView fx:id="attendanceTable" VBox.vgrow="ALWAYS">
-                    <columns>
-                        <TableColumn fx:id="colAttendanceName" text="ΓΙΑΤΡΟΣ" prefWidth="200" />
-                        <TableColumn fx:id="colAttendanceStatus" text="ΠΑΡΩΝ" prefWidth="80" />
-                    </columns>
-                    <columnResizePolicy>
-                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                    </columnResizePolicy>
-                </TableView>
+            <!-- 2. ΠΑΡΟΥΣΙΟΛΟΓΙΟ: Καταλαμβάνει το υπόλοιπο 74% (Ασθενής + Γιατρός) -->
+            <VBox spacing="0" HBox.hgrow="ALWAYS" maxWidth="Infinity" style="-fx-background-color: white; -fx-padding: 0 15 15 15; -fx-background-radius: 0 10 10 0; -fx-border-color: #dcdde1; -fx-border-width: 1 1 1 0; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 0);">
+                <children>
+                    <HBox alignment="CENTER_RIGHT" minHeight="25">
+                        <Label fx:id="notificationAttendanceLabel" visible="false" style="-fx-font-size: 11px; -fx-font-weight: bold;" />
+                    </HBox>
+                    <VBox spacing="10" VBox.vgrow="ALWAYS">
+                        <HBox spacing="10" alignment="CENTER_LEFT">
+                            <Label text="👨‍⚕️ ΠΑΡΟΥΣΙΟΛΟΓΙΟ ΓΙΑΤΡΩΝ" style="-fx-font-weight: bold;" />
+                            <Region HBox.hgrow="ALWAYS" />
+                            <Button fx:id="btnSaveAttendance" onAction="#saveAttendanceClick" text="ΑΠΟΘΗΚΕΥΣΗ" style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-weight: bold;" />
+                        </HBox>
+                        <TableView fx:id="attendanceTable" VBox.vgrow="ALWAYS">
+                            <columns>
+                                <TableColumn fx:id="colAttendanceName" text="ΓΙΑΤΡΟΣ" />
+                                <TableColumn fx:id="colAttendanceStatus" text="ΠΑΡΩΝ" maxWidth="100" />
+                            </columns>
+                            <columnResizePolicy>
+                                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                            </columnResizePolicy>
+                        </TableView>
+                    </VBox>
+                </children>
             </VBox>
         </children>
     </HBox>
