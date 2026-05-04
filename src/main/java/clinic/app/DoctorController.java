@@ -135,7 +135,7 @@ public class DoctorController {
         TextField editPhone = new TextField(doctor.getPhone());
         ColorPicker editColor = new ColorPicker(Color.web(doctor.getColor()));
 
-        grid.add(new Label("Επίθετο:"), 0, 0); grid.add(editLastName, 1, 0);
+        grid.add(new Label("Επώνυμο:"), 0, 0); grid.add(editLastName, 1, 0);
         grid.add(new Label("Όνομα:"), 0, 1);   grid.add(editFirstName, 1, 1);
         grid.add(new Label("Ειδικότητα:"), 0, 2); grid.add(editSpecialty, 1, 2);
         grid.add(new Label("Τηλέφωνο:"), 0, 3); grid.add(editPhone, 1, 3);

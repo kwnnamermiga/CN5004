@@ -17,7 +17,7 @@
     </Label>
 
     <HBox spacing="10" alignment="CENTER_LEFT" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 10; -fx-border-color: #dcdde1;">
-        <TextField fx:id="txtLastName" promptText="ΕΠΙΘΕΤΟ" prefWidth="120" alignment="CENTER" />
+        <TextField fx:id="txtLastName" promptText="ΕΠΩΝΥΜΟ" prefWidth="120" alignment="CENTER" />
         <TextField fx:id="txtFirstName" promptText="ΟΝΟΜΑ" prefWidth="120" alignment="CENTER" />
         <TextField fx:id="txtBirthDate" promptText="ΗΜ. ΓΕΝΝΗΣΗΣ (ΧΧ/ΧΧ/ΧΧΧΧ)" prefWidth="190" alignment="CENTER" />
         <TextField fx:id="txtPhone" promptText="ΤΗΛΕΦΩΝΟ" prefWidth="120" alignment="CENTER" />
@@ -25,11 +25,11 @@
         <Button text="Αποθήκευση" onAction="#addPatient" style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand;"/>
     </HBox>
 
-    <TextField fx:id="searchField" promptText="🔍 Αναζήτηση ασθενή με επίθετο ή ΑΜΚΑ..." style="-fx-pref-height: 35;"/>
+    <TextField fx:id="searchField" promptText="🔍 Αναζήτηση ασθενή με επώνυμο ή ΑΜΚΑ..." style="-fx-pref-height: 35;"/>
 
     <TableView fx:id="patientsTable" prefHeight="400.0" prefWidth="950.0" VBox.vgrow="ALWAYS">
         <columns>
-            <TableColumn fx:id="colLastName" text="ΕΠΙΘΕΤΟ" minWidth="180.0" prefWidth="200.0" />
+            <TableColumn fx:id="colLastName" text="ΕΠΩΝΥΜΟ" minWidth="180.0" prefWidth="200.0" />
             <TableColumn fx:id="colFirstName" text="ΟΝΟΜΑ" minWidth="150.0" prefWidth="170.0" />
             <TableColumn fx:id="colBirthDate" text="ΗΜ. ΓΕΝΝΗΣΗΣ" minWidth="120.0" prefWidth="130.0" />
             <TableColumn fx:id="colPhone" text="ΤΗΛΕΦΩΝΟ" minWidth="120.0" prefWidth="130.0" />

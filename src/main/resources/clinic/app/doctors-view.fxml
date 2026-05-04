@@ -17,7 +17,7 @@
     </Label>
 
     <HBox spacing="10" alignment="CENTER_LEFT" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 10; -fx-border-color: #dcdde1;">
-        <TextField fx:id="txtLastName" promptText="ΕΠΙΘΕΤΟ" prefWidth="120" alignment="CENTER" />
+        <TextField fx:id="txtLastName" promptText="ΕΠΩΝΥΜΟ" prefWidth="120" alignment="CENTER" />
         <TextField fx:id="txtFirstName" promptText="ΟΝΟΜΑ" prefWidth="120" alignment="CENTER" />
         <ComboBox fx:id="comboSpecialty" promptText="ΕΙΔΙΚΟΤΗΤΑ" prefWidth="140" style="-fx-text-alignment: center; -fx-alignment: center;"  />
         <TextField fx:id="txtPhone" promptText="ΤΗΛΕΦΩΝΟ" prefWidth="100" alignment="CENTER"/>
@@ -28,13 +28,13 @@
         <Button text="Αποθήκευση" onAction="#addDoctor" style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-font-weight: bold; -fx-cursor: hand;"/>
     </HBox>
 
-    <TextField fx:id="searchField" promptText="🔍 Αναζήτηση γιατρού με επίθετο ή ειδικότητα..." style="-fx-pref-height: 35;"/>
+    <TextField fx:id="searchField" promptText="🔍 Αναζήτηση γιατρού με επώνυμο ή ειδικότητα..." style="-fx-pref-height: 35;"/>
 
     <TableView fx:id="doctorsTable" prefHeight="400.0" prefWidth="950.0" VBox.vgrow="ALWAYS">
         <columns>
             <TableColumn fx:id="colColor" text="ΧΡΩΜΑ" maxWidth="80.0" minWidth="60.0" prefWidth="70.0" />
 
-            <TableColumn fx:id="colLastName" text="ΕΠΙΘΕΤΟ" minWidth="150.0" prefWidth="180.0" />
+            <TableColumn fx:id="colLastName" text="ΕΠΩΝΥΜΟ" minWidth="150.0" prefWidth="180.0" />
             <TableColumn fx:id="colFirstName" text="ΟΝΟΜΑ" minWidth="150.0" prefWidth="150.0" />
             <TableColumn fx:id="colSpecialty" text="ΕΙΔΙΚΟΤΗΤΑ" minWidth="150.0" prefWidth="180.0" />
             <TableColumn fx:id="colPhone" text="ΤΗΛΕΦΩΝΟ" minWidth="120.0" prefWidth="130.0" />

@@ -64,18 +64,27 @@ public class PatientController {
 
     @FXML
     private void addPatient() {
+        // Έλεγχος για κενά πεδία
         if (txtLastName.getText().isEmpty() || txtFirstName.getText().isEmpty() ||
                 txtBirthDate.getText().isEmpty() || txtPhone.getText().isEmpty() || txtAmka.getText().isEmpty()) {
             showStatus("• Παρακαλώ συμπληρώστε όλα τα πεδία!", "#e74c3c");
             return;
         }
 
+        // Περιορισμός ΑΜΚΑ (11 ψηφία και μόνο αριθμοί)
+        String amkaValue = txtAmka.getText().trim();
+        if (amkaValue.length() != 11 || !amkaValue.matches("\\d+")) {
+            showStatus("• Το ΑΜΚΑ πρέπει να έχει ακριβώς 11 αριθμητικά ψηφία!", "#e74c3c");
+            return;
+        }
+
+        // Δημιουργία και αποθήκευση αν περάσουν οι έλεγχοι
         Patient newPatient = new Patient(
                 txtLastName.getText().trim(),
                 txtFirstName.getText().trim(),
                 txtBirthDate.getText().trim(),
                 txtPhone.getText().trim(),
-                txtAmka.getText().trim()
+                amkaValue
         );
 
         patientList.add(newPatient);
@@ -117,7 +126,7 @@ public class PatientController {
         TextField editPhone = new TextField(patient.getPhone());
         TextField editAmka = new TextField(patient.getAmka());
 
-        grid.add(new Label("Επίθετο:"), 0, 0);   grid.add(editLastName, 1, 0);
+        grid.add(new Label("Επώνυμο:"), 0, 0);   grid.add(editLastName, 1, 0);
         grid.add(new Label("Όνομα:"), 0, 1);     grid.add(editFirstName, 1, 1);
         grid.add(new Label("Ημ. Γέννησης:"), 0, 2); grid.add(editBirthDate, 1, 2);
         grid.add(new Label("Τηλέφωνο:"), 0, 3);  grid.add(editPhone, 1, 3);
