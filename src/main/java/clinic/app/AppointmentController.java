@@ -141,7 +141,7 @@ public class AppointmentController {
         save();
         updateFilter(); // Ανανέωση προβολής
         clearFields();
-        showNotification("Το ραντεβού καταχωρήθηκε!", "#27ae60");
+        showNotification("Το ραντεβού καταχωρήθηκε επιτυχώς!", "#27ae60");
     }
 
     private void loadInitialData() {
