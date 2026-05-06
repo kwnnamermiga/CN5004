@@ -1,4 +1,4 @@
-package clinic.app;
+package clinic.app.models;
 
 public class Appointment {
     private String date;

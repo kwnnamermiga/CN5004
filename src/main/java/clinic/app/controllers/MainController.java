@@ -1,4 +1,4 @@
-package clinic.app;
+package clinic.app.controllers;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

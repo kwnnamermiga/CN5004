@@ -1,4 +1,4 @@
-package clinic.app;
+package clinic.app.models;
 
 public class Patient {
     private String lastName;

@@ -4,7 +4,7 @@
 <?import javafx.geometry.Insets?>
 
 <VBox spacing="15.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="clinic.app.AppointmentController"
+      fx:controller="clinic.app.controllers.AppointmentController"
       style="-fx-background-color: #f1f2f6; -fx-padding: 30;">
 
     <HBox alignment="CENTER_LEFT" spacing="20.0">

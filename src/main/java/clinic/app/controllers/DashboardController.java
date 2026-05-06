@@ -1,5 +1,7 @@
-package clinic.app;
+package clinic.app.controllers;
 
+import clinic.app.models.Appointment;
+import clinic.app.models.DoctorAttendance;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;

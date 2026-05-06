@@ -1,5 +1,6 @@
-package clinic.app;
+package clinic.app.controllers;
 
+import clinic.app.models.Patient;
 import javafx.animation.PauseTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

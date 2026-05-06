@@ -1,4 +1,4 @@
-package clinic.app;
+package clinic.app.models;
 import javafx.scene.control.CheckBox;
 
 public class DoctorAttendance {

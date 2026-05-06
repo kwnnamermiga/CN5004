@@ -1,5 +1,6 @@
-package clinic.app;
+package clinic.app.controllers;
 
+import clinic.app.models.Appointment;
 import javafx.animation.FadeTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
