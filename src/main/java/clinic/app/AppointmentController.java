@@ -16,6 +16,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
 import java.util.Set;
+import javafx.event.ActionEvent;
 
 public class AppointmentController {
 
@@ -301,11 +302,14 @@ public class AppointmentController {
         Dialog<ButtonType> dialog = new Dialog<>();
         dialog.setTitle("Επεξεργασία Ραντεβού");
         dialog.setHeaderText("Τροποποιήστε τα στοιχεία του ραντεβού.");
+
         ButtonType saveButtonType = new ButtonType("Αποθήκευση", ButtonBar.ButtonData.OK_DONE);
         dialog.getDialogPane().getButtonTypes().addAll(saveButtonType, ButtonType.CANCEL);
+
         GridPane grid = new GridPane();
         grid.setHgap(10); grid.setVgap(10);
         grid.setPadding(new Insets(20, 150, 10, 10));
+
         DatePicker editDate = new DatePicker(LocalDate.parse(app.getDate(), formatter));
         ComboBox<String> editTime = new ComboBox<>(comboTime.getItems());
         editTime.setValue(app.getTime());
@@ -313,19 +317,54 @@ public class AppointmentController {
         editPatient.setValue(app.getPatientName());
         ComboBox<String> editDoctor = new ComboBox<>(comboDoctor.getItems());
         editDoctor.setValue(app.getDoctorName());
+
         grid.add(new Label("Ημερομηνία:"), 0, 0); grid.add(editDate, 1, 0);
         grid.add(new Label("Ώρα:"), 0, 1);       grid.add(editTime, 1, 1);
         grid.add(new Label("Ασθενής:"), 0, 2);    grid.add(editPatient, 1, 2);
         grid.add(new Label("Γιατρός:"), 0, 3);    grid.add(editDoctor, 1, 3);
+
         dialog.getDialogPane().setContent(grid);
+
+        // Έλεγχος περιορισμών
+        final Button btSave = (Button) dialog.getDialogPane().lookupButton(saveButtonType);
+        btSave.addEventFilter(ActionEvent.ACTION, event -> {
+            String newDate = editDate.getValue().format(formatter);
+            String newTime = editTime.getValue();
+            String newDoc = editDoctor.getValue();
+            String newPat = editPatient.getValue();
+
+            // 1. Έλεγχος Γιατρού (Αγνοώντας το τρέχον ραντεβού 'app')
+            for (Appointment other : appointmentList) {
+                if (other != app &&
+                        other.getDate().equals(newDate) &&
+                        other.getTime().equals(newTime) &&
+                        other.getDoctorName().equals(newDoc)) {
+
+                    showNotification("Ο γιατρός είναι ήδη απασχολημένος αυτή την ώρα!", "#e74c3c");
+                    event.consume(); // Εμποδίζει το κλείσιμο του διαλόγου
+                    return;
+                }
+            }
+
+            // 2. Έλεγχος Ασθενή (30 λεπτά - χρησιμοποιώντας τη μέθοδο isPatientBusyForEdit)
+            if (isPatientBusyForEdit(app, newPat, newDate, newTime)) {
+                showNotification("Ο ασθενής έχει άλλο ραντεβού σε λιγότερο από 30 λεπτά!", "#e74c3c");
+                event.consume(); // Εμποδίζει το κλείσιμο του διαλόγου
+                return;
+            }
+        });
+        // --- ΤΕΛΟΣ ΔΙΟΡΘΩΣΗΣ ---
+
         dialog.showAndWait().ifPresent(response -> {
             if (response == saveButtonType) {
+                // Εδώ φτάνουμε ΜΟΝΟ αν οι έλεγχοι παραπάνω πέτυχαν
                 String newDoctorName = editDoctor.getValue();
                 app.setDate(editDate.getValue().format(formatter));
                 app.setTime(editTime.getValue());
                 app.setPatientName(editPatient.getValue());
                 app.setDoctorName(newDoctorName);
                 app.setDoctorColor(getDoctorColor(newDoctorName));
+
                 appointmentsTable.refresh();
                 save();
                 updateFilter();
@@ -360,4 +399,21 @@ public class AppointmentController {
         }
         return false;
     }
+
+    private boolean isPatientBusyForEdit(Appointment currentApp, String patient, String date, String newTime) {
+        int newTimeMin = timeToMinutes(newTime); // Μετατροπή της νέας ώρας σε λεπτά
+
+        for (Appointment other : appointmentList) {
+            // Ελέγχουμε αν είναι ο ίδιος ασθενής, η ίδια μέρα ΚΑΙ δεν είναι το ίδιο το ραντεβού
+            if (other != currentApp && other.getPatientName().equals(patient) && other.getDate().equals(date)) {
+                int existingTimeMin = timeToMinutes(other.getTime());
+                // Αν η διαφορά είναι μικρότερη από 30 λεπτά
+                if (Math.abs(newTimeMin - existingTimeMin) < 30) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
 }
