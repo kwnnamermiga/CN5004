@@ -41,8 +41,10 @@ public class MainController {
 
     private void loadView(String fxmlFile) {
         try {
+            String path = "/clinic/app/" + fxmlFile;
+
             // Φόρτωση του νέου FXML
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(path));
             Parent root = loader.load();
 
             // Αντικατάσταση του περιεχομένου στο κέντρο
