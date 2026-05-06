@@ -134,13 +134,21 @@ public class PatientController {
 
         dialog.getDialogPane().setContent(grid);
 
-        // Έλεγχος κενών μέσα στο Dialog
+        // Έλεγχος κενών και εγκυρότητας μέσα στο Dialog
         final Button btSave = (Button) dialog.getDialogPane().lookupButton(saveButtonType);
         btSave.addEventFilter(ActionEvent.ACTION, event -> {
+            // Ορίζουμε το amkaText εδώ για να ξέρει η Java τι ελέγχουμε
+            String amkaText = editAmka.getText().trim();
+
             if (editLastName.getText().trim().isEmpty() || editFirstName.getText().trim().isEmpty() ||
                     editBirthDate.getText().trim().isEmpty() || editPhone.getText().trim().isEmpty() ||
-                    editAmka.getText().trim().isEmpty()) {
+                    amkaText.isEmpty()) {
                 showStatus("• Παρακαλώ συμπληρώστε όλα τα πεδία στο παράθυρο!", "#e74c3c");
+                event.consume();
+            }
+            // Τώρα το amkaText αναγνωρίζεται κανονικά
+            else if (amkaText.length() != 11 || !amkaText.matches("\\d+")) {
+                showStatus("• Το ΑΜΚΑ πρέπει να είναι ακριβώς 11 ψηφία και μόνο αριθμοί!", "#e74c3c");
                 event.consume();
             }
         });
