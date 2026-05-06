@@ -353,7 +353,7 @@ public class AppointmentController {
                 return;
             }
         });
-        // --- ΤΕΛΟΣ ΔΙΟΡΘΩΣΗΣ ---
+
 
         dialog.showAndWait().ifPresent(response -> {
             if (response == saveButtonType) {
