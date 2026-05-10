@@ -150,6 +150,22 @@ public class DoctorController {
                     editSpecialty.getValue() == null || editPhone.getText().trim().isEmpty()) {
                 showStatus("• Παρακαλώ συμπληρώστε όλα τα πεδία στο παράθυρο!", "#e74c3c");
                 event.consume();
+                return;
+            }
+
+            // 2. Έλεγχος για το ΧΡΩΜΑ
+            Color c = editColor.getValue();
+            String hexColor = String.format("#%02X%02X%02X", (int)(c.getRed()*255), (int)(c.getGreen()*255), (int)(c.getBlue()*255));
+
+            for (Doctor d : doctorList) {
+                // Αν το χρώμα υπάρχει σε ΑΛΛΟΝ γιατρό (ελέγχουμε με το Επώνυμο και το Όνομα)
+                if (d.getColor().equalsIgnoreCase(hexColor) &&
+                        !(d.getLastName().equals(doctor.getLastName()) && d.getFirstName().equals(doctor.getFirstName()))) {
+
+                    showStatus("• Το χρώμα χρησιμοποιείται ήδη από τον/την: " + d.getLastName(), "#e74c3c");
+                    event.consume();
+                    return;
+                }
             }
         });
 
