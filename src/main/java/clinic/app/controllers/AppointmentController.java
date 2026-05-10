@@ -18,6 +18,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
 import java.util.Set;
 import javafx.event.ActionEvent;
+import javafx.collections.transformation.SortedList;
+
 
 public class AppointmentController {
 
@@ -72,10 +74,32 @@ public class AppointmentController {
         loadInitialData();
         loadAppointments();
 
-        // Δημιουργία της FilteredList και σύνδεση με τον TableView
         filteredList = new FilteredList<>(appointmentList);
-        appointmentsTable.setItems(filteredList);
-        updateFilter(); // Αρχικό φιλτράρισμα (μόνο προσεχή)
+
+        // Δημιουργούμε τη sortedList πάνω στη filteredList
+        SortedList<Appointment> sortedList = new SortedList<>(filteredList);
+
+        // Εδώ ορίζουμε την ταξινόμηση
+        sortedList.setComparator((app1, app2) -> {
+            try {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                LocalDate d1 = LocalDate.parse(app1.getDate(), formatter);
+                LocalDate d2 = LocalDate.parse(app2.getDate(), formatter);
+
+                int res = d1.compareTo(d2);
+                if (res == 0) {
+                    return app1.getTime().compareTo(app2.getTime());
+                }
+                return res;
+            } catch (Exception e) {
+                return 0;
+            }
+        });
+
+        // ΤΕΛΙΚΗ ΣΥΝΔΕΣΗ: Ο πίνακας παίρνει τη sortedList
+        appointmentsTable.setItems(sortedList);
+
+        updateFilter();
 
         // 5. Listeners
         datePicker.valueProperty().addListener((obs, oldVal, newVal) -> updateAvailableHours());
