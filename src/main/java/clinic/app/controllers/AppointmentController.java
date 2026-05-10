@@ -171,25 +171,39 @@ public class AppointmentController {
     }
 
     private void loadInitialData() {
-        // Φόρτωση Γιατρών
+        // 1. Φόρτωση και Ταξινόμηση Γιατρών
         try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream("doctors.txt"), StandardCharsets.UTF_8))) {
-            comboDoctor.getItems().clear();
+            ObservableList<String> doctorNames = FXCollections.observableArrayList();
             String line;
             while ((line = br.readLine()) != null) {
                 String[] p = line.split(",");
-                if (p.length >= 2) comboDoctor.getItems().add(p[0].trim() + " " + p[1].trim());
+                if (p.length >= 2) {
+                    doctorNames.add(p[0].trim() + " " + p[1].trim());
+                }
             }
-        } catch (Exception e) { e.printStackTrace(); }
+            // Ταξινόμηση αλφαβητικά
+            java.util.Collections.sort(doctorNames);
+            comboDoctor.setItems(doctorNames);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-        // Φόρτωση Ασθενών
+        // 2. Φόρτωση και Ταξινόμηση Ασθενών
         try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream("patients.txt"), StandardCharsets.UTF_8))) {
-            comboPatient.getItems().clear();
+            ObservableList<String> patientNames = FXCollections.observableArrayList();
             String line;
             while ((line = br.readLine()) != null) {
                 String[] p = line.split(",");
-                if (p.length >= 2) comboPatient.getItems().add(p[0].trim() + " " + p[1].trim());
+                if (p.length >= 2) {
+                    patientNames.add(p[0].trim() + " " + p[1].trim());
+                }
             }
-        } catch (Exception e) { e.printStackTrace(); }
+            // Ταξινόμηση αλφαβητικά
+            java.util.Collections.sort(patientNames);
+            comboPatient.setItems(patientNames);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void updateAvailableHours() {
